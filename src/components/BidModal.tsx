@@ -387,3 +387,4 @@ const BidModal = ({ isOpen, onClose, item, onBidSuccess, guildType = 'guild1' }:
 };
 
 export default BidModal;
+

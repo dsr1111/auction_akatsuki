@@ -20,3 +20,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: '인증 실패' }, { status: 500 });
   }
 }
+

@@ -107,3 +107,4 @@ const NoticePopup = ({ isOpen, onClose }: NoticePopupProps) => {
 };
 
 export default NoticePopup;
+

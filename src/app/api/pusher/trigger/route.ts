@@ -22,3 +22,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: '트리거 실패' }, { status: 500 });
   }
 }
+

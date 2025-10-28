@@ -6,7 +6,6 @@ import BidHistoryModal from './BidHistoryModal';
 import ItemEditModal from './ItemEditModal';
 import CustomTooltip from './CustomTooltip';
 import { useSession } from 'next-auth/react';
-import { useServerTime } from '@/hooks/useServerTime';
 
 
 type ItemCardProps = {
@@ -19,6 +18,9 @@ type ItemCardProps = {
     end_time: string | null;
     quantity?: number;
     remaining_quantity?: number;
+    timeLeft?: string;
+    isEnded?: boolean;
+    serverTimeOffset?: number;
   };
   onBidSuccess?: () => void;
   onItemDeleted?: () => void;
@@ -39,15 +41,16 @@ const ItemCard = ({ item, onBidSuccess, onItemDeleted, guildType = 'guild1' }: I
     current_bid,
     last_bidder_nickname,
     end_time,
+    timeLeft: initialTimeLeft,
+    isEnded: initialIsEnded,
   } = item;
   const { data: session } = useSession();
-  const { getTimeUntil, isInitialized } = useServerTime();
 
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isBidHistoryModalOpen, setIsBidHistoryModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<string>('');
-  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<string>(initialTimeLeft || '');
+  const [isAuctionEnded, setIsAuctionEnded] = useState<boolean>(initialIsEnded || false);
   const [imageError, setImageError] = useState(false);
   
   // 이미지 로드 실패 시 기본 이미지 사용
@@ -73,14 +76,18 @@ const ItemCard = ({ item, onBidSuccess, onItemDeleted, guildType = 'guild1' }: I
 
 
 
-  // 남은 시간 계산 (서버 시간 기준)
+  // 실시간 시간 계산 (1초마다 업데이트)
   useEffect(() => {
+    if (!end_time) return;
+    
     const calculateTimeLeft = () => {
-      if (!end_time || !isInitialized) return;
-      
-      const difference = getTimeUntil(end_time);
+      // 서버 시간 오프셋을 사용해서 모든 브라우저에서 동일한 시간 보장
+      const serverTimeOffset = item.serverTimeOffset || 0;
+      const now = Date.now() + serverTimeOffset;
+      const endTime = new Date(end_time).getTime();
+      const difference = endTime - now;
 
-      if (difference === null || difference <= 0) {
+      if (difference <= 0) {
         setTimeLeft('마감');
         setIsAuctionEnded(true);
         return;
@@ -104,13 +111,14 @@ const ItemCard = ({ item, onBidSuccess, onItemDeleted, guildType = 'guild1' }: I
       }
 
       setTimeLeft(timeString);
+      setIsAuctionEnded(false);
     };
 
     calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000); // 1초마다 업데이트
+    const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [end_time, isInitialized, getTimeUntil]);
+  }, [end_time, item.serverTimeOffset]);
 
 
 
@@ -297,3 +305,4 @@ const ItemCard = ({ item, onBidSuccess, onItemDeleted, guildType = 'guild1' }: I
 };
 
 export default ItemCard;
+
