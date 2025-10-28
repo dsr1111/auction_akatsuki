@@ -73,8 +73,8 @@ const NoticePopup = ({ isOpen, onClose }: NoticePopupProps) => {
                 <h4 className="font-medium text-blue-800 mb-2">수수료 상세</h4>
                 <ul className="text-sm text-blue-700 space-y-1">
                   <li>• 판매금 분배 메일 발송 수수료 → 1%</li>
-                  <li>• 길드 마스터 각종 운영 및 관리비 → 1%</li>
-                  <li>• 길드 이벤트용 저축 자금 → 8%</li>
+                  <li>• 길드 운영진(3명)  관리비 → 3%</li>
+                  <li>• 길드 이벤트용 저축 자금 → 6%</li>
                   <li className="font-medium text-blue-800">• 총 10% 수수료</li>
                 </ul>
               </div>

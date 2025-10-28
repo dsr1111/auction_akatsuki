@@ -79,9 +79,10 @@ export const authOptions = {
             
             // 길드별 멤버십 정보 저장
             (user as any).isGuild1Member = isAdminGuild1 || isGuild1Role;
-            (user as any).isGuild2Member = isAdminGuild2 || isGuild2Role;
+            // 아카츠키 길드: 서버에 속한 모든 멤버에게 접근 권한 부여
+            (user as any).isGuild2Member = true; // 서버 멤버면 항상 true
             (user as any).guild1Member = isAdminGuild1 || isGuild1Role;
-            (user as any).guild2Member = isAdminGuild2 || isGuild2Role;
+            (user as any).guild2Member = true; // 서버 멤버면 항상 true
             (user as any).isAdminGuild1 = isAdminGuild1; // 세계수 관리자 여부
             (user as any).isAdminGuild2 = isAdminGuild2; // 아카츠키 관리자 여부
             
