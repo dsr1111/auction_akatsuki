@@ -359,3 +359,29 @@ const CompletedAuctionExport = ({ guildType = 'guild1' }: CompletedAuctionExport
 
 export default CompletedAuctionExport;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
